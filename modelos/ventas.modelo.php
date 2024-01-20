@@ -85,7 +85,7 @@ class VentasModelo
 
         try {
 
-            $stmt = Conexion::conectar()->prepare("SELECT Concat('Boleta Nro: ',v.nro_boleta,' - Total Venta: $ ',Round(vc.total_venta,2)) as nro_boleta,
+            $stmt = Conexion::conectar()->prepare("SELECT Concat('Factura Nro: ',v.nro_boleta,' - Total Venta: $ ',Round(vc.total_venta,2)) as nro_boleta,
                                                             v.codigo_producto,
                                                             c.nombre_categoria,
                                                             p.descripcion_producto,

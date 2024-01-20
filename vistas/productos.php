@@ -116,10 +116,10 @@
         <!-- DATATABLE DE LISTADO -->
         <!-- row para listado de productos/inventario -->
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-15">
                 <table id="tbl_productos" class="table table-striped w-100 shadow">
                     <thead class="bg-info">
-                        <tr style="font-size: 15px;">
+                        <tr style="font-size: 12px;">
                             <th></th>
                             <th>id</th>
                             <th>Codigo</th>
