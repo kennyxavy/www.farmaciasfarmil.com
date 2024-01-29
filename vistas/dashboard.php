@@ -459,7 +459,7 @@
                          '<td>' + respuesta[i]["codigo_producto"] + '</td>' +
                          '<td>' + respuesta[i]["descripcion_producto"] + '</td>' +
                          '<td>' + respuesta[i]["stock_producto"] + '</td>' +
-                         '<td> $ ' + respuesta[i]["minimo_stock_producto"] + '</td>' +
+                         '<td>' + respuesta[i]["minimo_stock_producto"] + '</td>' +
                          '</tr>'
                      $("#tbl_productos_poco_stock tbody").append(filas);
                  }

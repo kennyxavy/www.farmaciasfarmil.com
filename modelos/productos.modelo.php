@@ -367,24 +367,26 @@ class ProductosModelo
     {
         try {
             $stmt = Conexion::conectar()->prepare("
-                SELECT   id,
-                            codigo_producto,
-                            c.id_categoria,
-                            c.nombre_categoria,
-                            descripcion_producto,
-                            marca_producto,
-                            ubicacion_producto,
-                            '1' as cantidad,
-                            CONCAT('$ ', CONVERT(ROUND(precio_venta_producto, 2), CHAR)) as precio_venta_producto,
-                            CONCAT('$ ', CONVERT(ROUND(1 * precio_venta_producto, 2), CHAR)) as total,
-                            '' as acciones,
-                            c.aplica_peso,
-                            p.precio_mayor_producto,
-                            p.precio_oferta_producto
-                        FROM productos p
-                        INNER JOIN categorias c ON p.id_categoria_producto = c.id_categoria
-                    WHERE codigo_producto = :codigoProducto
-                        AND p.stock_producto > 0
+                                    SELECT   id,
+                                    codigo_producto,
+                                    c.id_categoria,
+                                    c.nombre_categoria,
+                                    descripcion_producto,
+                                    marca_producto,
+                                    ubicacion_producto,
+                                    '1' as cantidad,
+                                    CONCAT('$ ', CONVERT(ROUND(precio_venta_producto, 2), CHAR)) as precio_venta_producto,
+                                    CONCAT('$ ', CONVERT(ROUND(1 * precio_venta_producto, 2), CHAR)) as total,
+                                    '' as acciones,
+                                    c.aplica_peso,
+                                    impuesto_producto_iva,
+                                    p.precio_mayor_producto,
+                                    p.precio_oferta_producto
+                                FROM productos p
+                                INNER JOIN categorias c ON p.id_categoria_producto = c.id_categoria
+                            WHERE codigo_producto = :codigoProducto
+                                AND p.stock_producto > 0
+        
             ");
 
             $stmt->bindParam(":codigoProducto", $codigoProducto, PDO::PARAM_INT);
@@ -409,6 +411,22 @@ class ProductosModelo
 
         $stmt->bindParam(":codigo_producto", $codigo_producto, PDO::PARAM_STR);
         $stmt->bindParam(":cantidad_a_comprar", $cantidad_a_comprar, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+    /*===================================================================
+    BUSCAR PRODUCTO POR SU CODIGO Y VER SI TIENE IMPUESTO
+    ====================================================================*/
+    static public function mdlCalcularImpuesto($codigoProducto)
+    {
+
+        $stmt = Conexion::conectar()->prepare("SELECT p.impuesto_producto_iva FROM productos p
+                                            WHERE codigo_producto = :codigoProducto");
+
+
+        $stmt->bindParam(":codigoProducto", $codigoProducto, PDO::PARAM_INT);
 
         $stmt->execute();
 
