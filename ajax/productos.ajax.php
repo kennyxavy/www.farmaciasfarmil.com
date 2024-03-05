@@ -209,8 +209,6 @@ if (isset($_POST['accion']) && $_POST['accion'] == 1) { // parametro para listar
 
     $verificaStock->codigo_producto = $_POST["codigo_producto"];
     $verificaStock->cantidad_a_comprar = $_POST["cantidad_a_comprar"];
-    // $verificaStock->cantidad_a_comprar = $_POST["impuesto_producto_iva"];
-
     $verificaStock->ajaxVerificaStockProducto();
 } else if (isset($_FILES)) {
     $archivo_productos = new ajaxProductos();

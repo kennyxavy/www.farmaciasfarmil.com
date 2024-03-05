@@ -29,314 +29,220 @@
 
 </div>
 <!-- /.content-header -->
+
 <!-- Main content -->
 <div class="content">
-    <div class="row">
-        <!-- INPUT PARA INGRESO DATOS PARA LA FACTURA -->
-        <div class="col-md-12">
-            <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title">Datos para la factura</h3>
-                    <div class="card-tools">
-                        <button class="btn btn-tool" type="button" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
+
+    <div class="container-fluid">
+
+        <div class="row mb-3">
+
+            <div class="col-md-9">
+
+                <div class="row">
+
+                    <!-- INPUT PARA INGRESO DEL CODIGO DE BARRAS O DESCRIPCION DEL PRODUCTO -->
+                    <div class="col-md-12 mb-3">
+
+                        <div class="form-group mb-2">
+
+                            <label class="col-form-label" for="iptCodigoVenta">
+                                <i class="fas fa-barcode fs-6"></i>
+                                <span class="small">Productos</span>
+                            </label>
+
+                            <input type="text" class="form-control form-control-sm" id="iptCodigoVenta" placeholder="Ingrese el código de barras o el nombre del producto">
+                        </div>
+
+                    </div>
+
+                    <!-- ETIQUETA QUE MUESTRA LA SUMA TOTAL DE LOS PRODUCTOS AGREGADOS AL LISTADO -->
+                    <div class="col-md-6 mb-3">
+                        <h3>Total Venta: $ <span id="totalVenta">0.00</span></h3>
+                    </div>
+
+                    <!-- BOTONES PARA VACIAR LISTADO Y COMPLETAR LA VENTA -->
+                    <div class="col-md-6 text-right">
+                        <button class="btn btn-primary" id="btnIniciarVenta">
+                            <i class="fas fa-shopping-cart"></i> Realizar Venta
+                        </button>
+                        <button class="btn btn-danger" id="btnVaciarListado">
+                            <i class="far fa-trash-alt"></i> Vaciar Listado
                         </button>
                     </div>
-                </div>
 
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-5 mb-3">
-                            <div class="form-group">
-                                <label for="iptRuc">RUC:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-id-card"></i>
-                                    </span>
-                                    <input type="text" class="form-control form-control-sm" id="iptRuc"
-                                        placeholder="Ingrese número de RUC del cliente">
-                                </div>
-                            </div>
-                        </div>
+                    <!-- LISTADO QUE CONTIENE LOS PRODUCTOS QUE SE VAN AGREGANDO PARA LA COMPRA -->
+                    <div class="col-md-12">
 
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label for="iptNombreApellido">Cliente:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                    <input type="text" class="form-control form-control-sm" id="iptNombreApellido"
-                                        placeholder="Ingrese Nombres y apellidos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label for="iptCorreo">Correo:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-envelope"></i>
-                                    </span>
-                                    <input type="text" class="form-control form-control-sm" id="iptCorreo"
-                                        placeholder="Ingrese el correo">
-                                </div>
-                            </div>
-                        </div>
+                        <table id="lstProductosVenta" class="display nowrap table-striped w-100 shadow ">
+                            <thead class="bg-info text-left fs-6">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Codigo</th>
+                                    <th>Id Categoria</th>
+                                    <th>Categoria</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Total</th>
+                                    <th class="text-center">Opciones</th>
+                                    <th>Aplica Peso</th>
+                                    <th>Impuesto IVA</th>
+                                    <th>Precio Por Mayor</th>
+                                    <th>Precio Oferta</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small text-left fs-6">
+                            </tbody>
+                        </table>
+                        <!-- / table -->
                     </div>
+                    <!-- /.col -->
+
                 </div>
-            </div>
-        </div>
-        <!-- INPUT PARA INGRESO DEL CODIGO DE BARRAS O DESCRIPCION DEL PRODUCTO -->
-        <div class="col-md-12 mb-3">
 
-            <div class="form-group mb-2">
-
-                <label class="col-form-label" for="iptCodigoVenta">
-                    <i class="fas fa-barcode fs-6"></i>
-                    <span class="small">Productos</span>
-                </label>
-
-                <input type="text" class="form-control form-control-sm" id="iptCodigoVenta"
-                    placeholder="Ingrese el código de barras o el nombre del producto">
             </div>
 
-        </div>
-        <div class="content pb-2">
-            <!-- <div class="container-fluid"> -->
+            <div class="col-md-3">
 
-            <div class="row mb-3">
+                <div class="card shadow">
 
-                <div class="col-md-9">
+                    <h5 class="card-header py-1 bg-primary text-white text-center">
+                        Total Venta: $ <span id="totalVentaRegistrar">0.00</span>
+                    </h5>
 
-                    <div class="row">
-                        <!-- ETIQUETA QUE MUESTRA LA SUMA TOTAL DE LOS PRODUCTOS AGREGADOS AL LISTADO -->
-                        <div class="col-md-6 mb-3">
-                            <h3>Total Venta: $ <span id="totalVenta">0.00</span></h3>
+                    <div class="card-body p-2">
+
+                        <!-- SELECCIONAR TIPO DE DOCUMENTO -->
+                        <div class="form-group mb-2">
+
+                            <label class="col-form-label" for="selCategoriaReg">
+                                <i class="fas fa-file-alt fs-6"></i>
+                                <span class="small">Documento</span><span class="text-danger">*</span>
+                            </label>
+
+                            <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="selDocumentoVenta" disabled>
+                                <option value="0">Seleccione Documento</option>
+                                <option value="1" selected="true">Nota de venta</option>
+                                <option value="2">Factura</option>
+                                <option value="3">Ticket</option>
+                            </select>
+
+                            <span id="validate_categoria" class="text-danger small fst-italic" style="display:none">
+                                Debe Seleccione documento
+                            </span>
+
                         </div>
 
-                        <!-- BOTONES PARA VACIAR LISTADO Y COMPLETAR LA VENTA -->
-                        <!-- <div class="col-md-6 text-right"></div>
-                            <button class="btn btn-primary" id="btnIniciarVenta">
-                                <i class="fas fa-shopping-cart"></i> Realizar Venta
-                            </button>
-                            <button class="btn btn-danger" id="btnVaciarListado">
-                                <i class="far fa-trash-alt"></i> Vaciar Listado
-                            </button>
-                        </div> -->
+                        <!-- SELECCIONAR TIPO DE PAGO -->
+                        <div class="form-group mb-2">
 
-                        <!-- LISTADO QUE CONTIENE LOS PRODUCTOS QUE SE VAN AGREGANDO PARA LA COMPRA -->
-                        <div class="col-md-12">
+                            <label class="col-form-label" for="selCategoriaReg">
+                                <i class="fas fa-money-bill-alt fs-6"></i>
+                                <span class="small">Tipo Pago</span><span class="text-danger">*</span>
+                            </label>
 
-                            <table id="lstProductosVenta" class="display nowrap table-striped w-100 shadow ">
-                                <thead class="bg-info text-left fs-6">
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Ubicacion</th>
-                                        <th>Id Categoria</th>
-                                        <th>Categoria</th>
-                                        <th>Producto</th>
-                                        <th>Cantidad</th>
-                                        <th>Precio</th>
-                                        <th>Total</th>
-                                        <th class="text-center">Opciones</th>
-                                        <th>Aplica Peso</th>
-                                        <th>Impuesto IVA</th>
-                                        <th>Precio Por Mayor</th>
-                                        <th>Precio Oferta</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="small text-left fs-6">
-                                </tbody>
-                            </table>
-                            <!-- / table -->
+                            <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="selTipoPago" disabled>
+                                <option value="0">Seleccione Tipo Pago</option>
+                                <option value="1" selected="true">Efectivo</option>
+                                <option value="2">Tarjeta</option>
+                                <option value="3">Yape</option>
+                                <option value="4">plin</option>
+                            </select>
+
+                            <span id="validate_categoria" class="text-danger small fst-italic" style="display:none">
+                                Debe Ingresar tipo de pago
+                            </span>
+
                         </div>
-                        <!-- /.col -->
 
-                    </div>
+                        <!-- SERIE Y NRO DE BOLETA -->
+                        <div class="form-group">
 
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card shadow">
-                        <h5 class="card-header py-1 bg-info text-white text-center">
-                            Calculo de Valores
-                        </h5>
-                        <div class="card-body p-2">
-                            <!-- SERIE Y NRO DE BOLETA -->
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="iptNroSerie">Serie :</label>
-                                        <input type="text" min="0" name="iptEfectivo" id="iptNroSerie"
-                                            class="form-control form-control-sm" placeholder="nro Serie" disabled>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <label for="iptNroVenta">Número Factura :</label>
-                                        <input type="text" min="0" name="iptEfectivo" id="iptNroVenta"
-                                            class="form-control form-control-sm" placeholder="Nro Venta" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- SELECCIONAR TIPO DE DOCUMENTO -->
-                            <div class="form-group mb-2">
-                                <label class="col-form-label" for="selCategoriaReg">
-                                    <i class="fas fa-file-alt fs-6"></i>
-                                    <span class="small">Documento</span><span class="text-danger">*</span>
-                                </label>
-
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example"
-                                    id="selDocumentoVenta" disabled>
-                                    <option value="0">Seleccione Documento</option>
-                                    <option value="1" selected="true">Nota de venta</option>
-                                    <option value="2">Factura</option>
-
-                                </select>
-
-                                <span id="validate_categoria" class="text-danger small fst-italic" style="display:none">
-                                    Debe Seleccione documento
-                                </span>
-
-                            </div>
-
-                            <!-- SELECCIONAR TIPO DE PAGO -->
-                            <div class="form-group mb-2">
-
-                                <label class="col-form-label" for="selCategoriaReg">
-                                    <i class="fas fa-money-bill-alt fs-6"></i>
-                                    <span class="small">Forma de Pago</span><span class="text-danger">*</span>
-                                </label>
-
-                                <select class="form-select form-select-sm" aria-label=".form-select-sm example"
-                                    id="selTipoPago" disabled>
-                                    <option value="0">Seleccione Tipo Pago</option>
-                                    <option value="1" selected="true">Efectivo</option>
-                                    <option value="2">Tarjeta de Crédito</option>
-                                    <option value="3">Tarjeta de Débito</option>
-                                    <option value="4">Transferencia</option>
-                                </select>
-
-
-                                <span id="validate_categoria" class="text-danger small fst-italic" style="display:none">
-                                    Debe Ingresar tipo de pago
-                                </span>
-                            </div>
-                            <!-- EFECTIVO RECIBIDO -->
-                            <div class="form-group">
-                                <label for="iptEfectivoRecibido">Efectivo recibido</label>
-                                <input type="number" min="0" name="iptEfectivo" id="iptEfectivoRecibido"
-                                    class="form-control form-control-sm" placeholder="Cantidad de efectivo recibida">
-                            </div>
-                            <!-- INPUT DE EFECTIVO ENTREGADO -->
-                            <div class="form-check d-flex justify-content-between">
-                                <label class="form-check-label" for="chkEfectivoExacto">
-                                    Efectivo Exacto
-                                </label>
-                                <input class="form-check-input" type="checkbox" value="" id="chkEfectivoExacto"
-                                    onclick="uncheckOtherCheckboxes(this)">
-                            </div>
-                            <!-- INPUT DE TRANSFERENCIA-->
-                            <div class="form-check d-flex justify-content-between">
-                                <label class="form-check-label" for="chkTransferenciaBancaria">
-                                    Transferencia Bancaria
-                                </label>
-                                <input class="form-check-input" type="checkbox" value="" id="chkTransferenciaBancaria"
-                                    onclick="uncheckOtherCheckboxes(this)">
-                            </div>
-
-                            <div class="form-check d-flex justify-content-between">
-                                <label class="form-check-label" for="chkTarjetaDebito">
-                                    Tarjeta de Débito
-                                </label>
-                                <input class="form-check-input" type="checkbox" value="" id="chkTarjetaDebito"
-                                    onclick="uncheckOtherCheckboxes(this)">
-                            </div>
-
-                            <div class="form-check d-flex justify-content-between">
-                                <label class="form-check-label" for="chkTarjetaCredito">
-                                    Tarjeta de Crédito
-                                </label>
-                                <input class="form-check-input" type="checkbox" value="" id="chkTarjetaCredito"
-                                    onclick="uncheckOtherCheckboxes(this)">
-                            </div>
-
-                            <div class="col-md-12 horizontal-line"></div>
-                            <!-- MOSTRAR MONTO EFECTIVO ENTREGADO Y EL VUELTO -->
-                            <div class="row mt-2">
-
-                                <div class="col-12">
-                                    <h6 class="text-start fw-bold">Monto Efectivo: $ <span
-                                            id="EfectivoEntregado">0.00</span></h6>
-                                </div>
-
-                                <div class="col-12">
-                                    <h6 class="text-start text-danger fw-bold">Vuelto: $ <span id="Vuelto">0.00</span>
-                                    </h6>
-                                </div>
-
-                            </div>
-
-                            <!-- MOSTRAR EL SUBTOTAL, IVA Y TOTAL DE LA VENTA -->
                             <div class="row">
-                                <div class="col-md-12 horizontal-line"></div>
 
-                                <div class="col-md-7">
-                                    <span>Tarjeta de Débito(2.24%)</span>
-                                </div>
-                                <div class="col-md-5 text-right">
-                                    $ <span class="" id="boleta_TDD">0.00</span>
-                                </div>
+                                <div class="col-md-4">
 
-                                <div class="col-md-7">
-                                    <span>Tarjeta de Crédito(5.4%)</span>
-                                </div>
-                                <div class="col-md-5 text-right">
-                                    $ <span class="" id="boleta_TDC">0.00</span>
+                                    <label for="iptNroSerie">Serie</label>
+
+                                    <input type="text" min="0" name="iptEfectivo" id="iptNroSerie" class="form-control form-control-sm" placeholder="nro Serie" disabled>
                                 </div>
 
-                                <div class="col-md-7">
-                                    <span>SUBTOTAL</span>
-                                </div>
-                                <div class="col-md-5 text-right">
-                                    $ <span class="" id="boleta_subtotal">0.00</span>
+                                <div class="col-md-8">
+
+                                    <label for="iptNroVenta">Nro Venta</label>
+
+                                    <input type="text" min="0" name="iptEfectivo" id="iptNroVenta" class="form-control form-control-sm" placeholder="Nro Venta" disabled>
+
                                 </div>
 
-                                <div class="col-md-7">
-                                    <span>IVA (12%)</span>
-                                </div>
-                                <div class="col-md-5 text-right">
-                                    $ <span class="" id="boleta_igv">0.00</span>
-                                </div>
-
-                                <div class="col-md-7">
-                                    <span>TOTAL</span>
-                                </div>
-                                <div class="col-md-5 text-right">
-                                    $ <span class="" id="boleta_total">0.00</span>
-                                </div>
-                                <h5 class="card-header py-1 bg-primary text-white text-center">
-                                    Total Venta: $ <span id="totalVentaRegistrar">0.00</span>
-                                </h5>
-                                <div class="col-md-12 horizontal-line"></div>
                             </div>
-                            <!-- BOTONES PARA VACIAR LISTADO Y COMPLETAR LA VENTA -->
-                            <div class="text-center">
-                                <button class="btn btn-success btn-sm" id="btnIniciarVenta">
-                                    <i class="fas fa-shopping-cart"></i> Realizar Venta
-                                </button>
-                                <button class="btn btn-danger btn-sm" id="btnVaciarListado">
-                                    <i class="far fa-trash-alt"></i> Vaciar Listado
-                                </button>
+
+                        </div>
+
+                        <!-- INPUT DE EFECTIVO ENTREGADO -->
+                        <div class="form-group">
+                            <label for="iptEfectivoRecibido">Efectivo recibido</label>
+                            <input type="number" min="0" name="iptEfectivo" id="iptEfectivoRecibido" class="form-control form-control-sm" placeholder="Cantidad de efectivo recibida">
+                        </div>
+
+                        <!-- INPUT CHECK DE EFECTIVO EXACTO -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="chkEfectivoExacto">
+                            <label class="form-check-label" for="chkEfectivoExacto">
+                                Efectivo Exacto
+                            </label>
+                        </div>
+
+                        <!-- MOSTRAR MONTO EFECTIVO ENTREGADO Y EL VUELTO -->
+                        <div class="row mt-2">
+
+                            <div class="col-12">
+                                <h6 class="text-start fw-bold">Monto Efectivo: $ <span id="EfectivoEntregado">0.00</span></h6>
                             </div>
-                        </div><!-- ./ CARD BODY -->
-                    </div><!-- ./ CARD -->
-                </div>
+
+                            <div class="col-12">
+                                <h6 class="text-start text-danger fw-bold">Vuelto: $ <span id="Vuelto">0.00</span>
+                                </h6>
+                            </div>
+
+                        </div>
+
+                        <!-- MOSTRAR EL SUBTOTAL, IVA Y TOTAL DE LA VENTA -->
+                        <div class="row">
+                            <div class="col-md-7">
+                                <span>SUBTOTAL</span>
+                            </div>
+                            <div class="col-md-5 text-right">
+                                $ <span class="" id="boleta_subtotal">0.00</span>
+                            </div>
+
+                            <div class="col-md-7">
+                                <span>IVA (12%)</span>
+                            </div>
+                            <div class="col-md-5 text-right">
+                                $ <span class="" id="boleta_igv">0.00</span>
+                            </div>
+
+                            <div class="col-md-7">
+                                <span>TOTAL</span>
+                            </div>
+                            <div class="col-md-5 text-right">
+                                $ <span class="" id="boleta_total">0.00</span>
+                            </div>
+                        </div>
+
+                    </div><!-- ./ CARD BODY -->
+
+                </div><!-- ./ CARD -->
             </div>
+
         </div>
     </div>
 
-    <script>
+</div>
+
+<script>
     var table;
     var items = []; // SE USA PARA EL INPUT DE AUTOCOMPLETE
     var itemProducto = 1;
@@ -347,18 +253,6 @@
         showConfirmButton: false,
         timer: 3000
     });
-    /* ======================================================================================
-                     //HABILITA SOLO UN CHECK A LA VEZ
-      ======================================================================================*/
-
-    function uncheckOtherCheckboxes(checkbox) {
-        var checkboxes = document.querySelectorAll('.form-check-input');
-        checkboxes.forEach(function(currentCheckbox) {
-            if (currentCheckbox !== checkbox) {
-                currentCheckbox.checked = false;
-            }
-        });
-    }
 
     $(document).ready(function() {
 
@@ -372,7 +266,7 @@
         =========================================================================================*/
         $("#btnVaciarListado").on('click', function() {
             vaciarListado();
-        });
+        })
 
         /* ======================================================================================
         INICIALIZAR LA TABLA DE VENTAS
@@ -460,24 +354,42 @@
                 "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
             }
         });
-        /* ======================================================================================
-            //HABILITA LOS SELECC LA FORMA DE PAGO Y TIPO DE DOCUMENTO
-             ======================================================================================*/
-        // Selecciona el elemento por su ID
-        //var selectElement = document.getElementById('selDocumentoVenta');
-
-        // Remueve el atributo 'disabled' para habilitar el elemento
-        // selectElement.removeAttribute('disabled');
-        // Selecciona el elemento por su ID
-        //var selectElement = document.getElementById('selTipoPago');
-
-        // Remueve el atributo 'disabled' para habilitar el elemento
-        // selectElement.removeAttribute('disabled');
 
         /* ======================================================================================
-       //Se agrega el botón de exportar a excel en la tabla #tabla_facturas
-        ======================================================================================*/
+		TRAER LISTADO DE PRODUCTOS PARA INPUT DE AUTOCOMPLETADO
+		======================================================================================*/
+        // $.ajax({
+        //     async: false,
+        //     url: "ajax/productos.ajax.php",
+        //     method: "POST",
+        //     data: {
+        //         'accion': 6
+        //     },
+        //     dataType: 'json',
+        //     success: function(respuesta) {
 
+        //         for (let i = 0; i < respuesta.length; i++) {
+        //             items.push(respuesta[i]['descripcion_producto'])
+        //         }
+
+        //         $("#iptCodigoVenta").autocomplete({
+
+        //             source: items,
+        //             select: function(event, ui) {
+
+        //                 CargarProductos(ui.item.value);
+
+        //                 $("#iptCodigoVenta").val("");
+
+        //                 $("#iptCodigoVenta").focus();
+
+        //                 return false;
+        //             }
+        //         })
+
+
+        //     }
+        // });
         $.ajax({
             url: "ajax/productos.ajax.php",
             method: "POST",
@@ -516,6 +428,7 @@
                 console.error("Error en la solicitud AJAX:", status, error);
             }
         });
+
 
         /* ======================================================================================
         EVENTO QUE REGISTRA EL PRODUCTO EN EL LISTADO CUANDO SE INGRESA EL CODIGO DE BARRAS
@@ -664,31 +577,25 @@
         });
 
         /* =======================================================================================
-        EVENTO QUE PERMITE CHECKEAR EL EFECTIVO CUANDO ES EXACTO O TRANSFERENCIA BANCARIA
-       =========================================================================================*/
+        EVENTO QUE PERMITE CHECKEAR EL EFECTIVO CUANDO ES EXACTO
+        =========================================================================================*/
         $("#chkEfectivoExacto").change(function() {
 
             if ($("#chkEfectivoExacto").is(':checked')) {
+
                 var vuelto = 0;
                 var totalVenta = $("#totalVenta").html();
+
                 $("#iptEfectivoRecibido").val(totalVenta);
+
                 $("#EfectivoEntregado").html(totalVenta);
+
                 var EfectivoRecibido = parseFloat($("#EfectivoEntregado").html().replace("$ ", ""));
+
                 vuelto = parseFloat(totalVenta) - parseFloat(EfectivoRecibido);
+
                 $("#Vuelto").html(vuelto.toFixed(2));
 
-            }
-            if ($("#chkTarjetaCredito").is(':checked')) {
-
-                $("#boleta_TDD").html("0.00");
-                var totalVenta = parseFloat($("#totalVenta").html());
-                $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
-                $("#EfectivoEntregado").html(totalVenta.toFixed(2));
-                var comision = parseFloat(totalVenta) * 0.054;
-                totalVenta += comision;
-                $("#boleta_TDC").html(comision.toFixed(2));
-                $("#boleta_total").html(totalVenta.toFixed(2));
-                $("#totalVentaRegistrar").html(totalVenta.toFixed(2))
             } else {
 
                 $("#iptEfectivoRecibido").val("")
@@ -697,93 +604,6 @@
 
             }
         })
-
-        // $("#chkEfectivoExacto, #chkTransferenciaBancaria").change(function() {
-        //     var tipo_pago;
-        //     if ($("#chkEfectivoExacto").is(':checked')) {
-        //         tipo_pago = "Exacto";
-        //     } else if ($("#chkTransferenciaBancaria").is(':checked')) {
-        //         tipo_pago = "Transferencia";
-        //     }
-
-        //     var efectivo = $("#boleta_subtotal").val("");
-        //     $("#totalVentaRegistrar").val(efectivo);
-        //     $("#boleta_TDC").html("0.00");
-        //     $("#boleta_TDD").html("0.00");
-
-        //     var EfectivoExactoTransferenciaBancaria = $("#chkEfectivoExacto").is(':checked') || $(
-        //         "#chkTransferenciaBancaria").is(':checked');
-
-        //     if (EfectivoExactoTransferenciaBancaria) {
-        //         var vuelto = 0;
-        //         var totalVenta = $("#totalVenta").html();
-        //         $("#iptEfectivoRecibido").val(totalVenta);
-        //         $("#EfectivoEntregado").html(totalVenta);
-        //         var EfectivoRecibido = parseFloat($("#EfectivoEntregado").html().replace("$", ""));
-        //         vuelto = parseFloat(totalVenta) - parseFloat(EfectivoRecibido);
-        //         $("#Vuelto").html(vuelto.toFixed(2));
-        //     } else {
-        //         $("#iptEfectivoRecibido").val("");
-        //         $("#EfectivoEntregado").html("0.00");
-        //         $("#Vuelto").html("0.00");
-        //     }
-        // });
-
-
-        /* =======================================================================================
-                EVENTO QUE PERMITE CHECKEAR PAGO DE TARJETA DE CREDITO
-                =========================================================================================*/
-        $("#chkTarjetaCredito").change(function() {
-            var tipo_pago;
-            if ($("#chkTarjetaCredito").is(':checked')) {
-                tipo_pago = "Tarjeta Credito";
-                $("#boleta_TDD").html("0.00");
-                var totalVenta = parseFloat($("#totalVenta").html());
-                $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
-                $("#EfectivoEntregado").html(totalVenta.toFixed(2));
-                var comision = parseFloat(totalVenta) * 0.054;
-                totalVenta += comision;
-                $("#boleta_TDC").html(comision.toFixed(2));
-                $("#boleta_total").html(totalVenta.toFixed(2));
-                $("#totalVentaRegistrar").html(totalVenta.toFixed(2))
-            } else {
-                $("#boleta_TDC").html("0.00");
-                $("#boleta_TDD").html("0.00");
-                $("#iptEfectivoRecibido").val("");
-                $("#EfectivoEntregado").html("0.00");
-                $("#Vuelto").html("0.00");
-
-            }
-
-
-        });
-        /* =======================================================================================
-                EVENTO QUE PERMITE CHECKEAR PAGO DE TARJETA DE DEBITO
-        =====================================================================================*/
-        $("#chkTarjetaDebito").change(function() {
-            var tipo_pago;
-            if ($("#chkTarjetaDebito").is(':checked')) {
-                tipo_pago = "Tarjeta Debito";
-                $("#boleta_TDC").html("0.00");
-                var totalVenta = parseFloat($("#totalVenta").html());
-                $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
-                $("#EfectivoEntregado").html(totalVenta.toFixed(2));
-                var comision = parseFloat(totalVenta) * 0.0224;
-                totalVenta += comision;
-                $("#boleta_TDD").html(comision.toFixed(2));
-                $("#boleta_total").html(totalVenta.toFixed(2));
-                $("#totalVentaRegistrar").html(totalVenta.toFixed(2))
-            } else {
-                $("#boleta_TDC").html("0.00");
-                $("#boleta_TDD").html("0.00");
-                $("#iptEfectivoRecibido").val("");
-                $("#EfectivoEntregado").html("0.00");
-                $("#Vuelto").html("0.00");
-
-            }
-
-
-        });
 
         /* ======================================================================================
         EVENTO QUE SE DISPARA AL DIGITAR EL MONTO EN EFECTIVO ENTREGADO POR EL CLIENTE
@@ -826,7 +646,6 @@
         });
     }
 
-
     /*===================================================================*/
     //FUNCION PARA LIMPIAR TOTALMENTE EL CARRITO DE VENTAS
     /*===================================================================*/
@@ -846,67 +665,66 @@
         $("#EfectivoEntregado").html("0.00");
         $("#Vuelto").html("0.00");
         $("#chkEfectivoExacto").prop('checked', false);
-        $("#chkTransferenciaBancaria").prop('checked', false);
-        $("#chkTarjetaCredito").prop('checked', false);
-        $("#chkTarjetaDebito").prop('checked', false);
         $("#boleta_subtotal").html("0.00");
-        $("#boleta_igv").html("0.00");
-
-        // Incluir limpieza para los nuevos campos
-        $("#iptRuc").val("");
-        $("#iptNombreApellido").val("");
-        $("#iptCorreo").val("");
-    }
-    /* FIN LimpiarInputs */
+        $("#boleta_igv").html("0.00")
+    } /* FIN LimpiarInputs */
 
     /*===================================================================*/
     //FUNCION PARA ACTUALIZAR EL VUELTO
     /*===================================================================*/
-
     function actualizarVuelto() {
 
         var totalVenta = $("#totalVenta").html();
 
         $("#chkEfectivoExacto").prop('checked', false);
-        $("#chkTransferenciaBancaria").prop('checked', false);
-        $("#chkTarjetaCredito").prop('checked', false);
-        $("#chkTarjetaDebito").prop('checked', false);
 
         var efectivoRecibido = $("#iptEfectivoRecibido").val();
+
         if (efectivoRecibido > 0) {
+
             $("#EfectivoEntregado").html(parseFloat(efectivoRecibido).toFixed(2));
+
             vuelto = parseFloat(efectivoRecibido) - parseFloat(totalVenta);
+
             $("#Vuelto").html(vuelto.toFixed(2));
+
         } else {
+
             $("#EfectivoEntregado").html("0.00");
             $("#Vuelto").html("0.00");
 
         }
     }
 
-    /*===================================================================*/
-    //FUNCION PARA RECALCULAR LOS MONTOS
-    /*===================================================================*/
-
 
     function recalcularMontos(codigo_producto, precio_venta) {
 
         table.rows().eq(0).each(function(index) {
+
             var row = table.row(index);
+
             var data = row.data();
+
             if (data['codigo_producto'] == codigo_producto) {
+
                 // AUMENTAR EN 1 EL VALOR DE LA CANTIDAD
                 table.cell(index, 6).data("$ " + parseFloat(precio_venta).toFixed(2)).draw();
+
                 // ACTUALIZAR EL NUEVO PRECIO DEL ITEM DEL LISTADO DE VENTA
-                NuevoPrecio = (parseFloat(data['cantidad']) * data['precio_venta_producto'].replaceAll(
-                    "$ ",
-                    "")).toFixed(2);
+                NuevoPrecio = (parseFloat(data['cantidad']) * data['precio_venta_producto'].replaceAll("$ ",
+                        ""))
+                    .toFixed(2);
                 NuevoPrecio = "$ " + NuevoPrecio;
                 table.cell(index, 7).data(NuevoPrecio).draw();
+
             }
+
+
         });
+
         // RECALCULAMOS TOTALES
         recalcularTotales();
+
     }
 
     /*===================================================================*/
@@ -922,8 +740,7 @@
 
             totalVenta += parseFloat(data['total'].replace("$ ", ""));
             var impuesto = parseInt(data['impuesto_producto_iva']);
-            iva += impuesto === 1 ? parseFloat(data['total'].replace("$ ", "")) * 0.12 :
-                0; //SI EL PRODUCTO TIENE IMPUESTO HACE SACA EL CALCULO DEL IVA AL SUBTOTAL CASO CONTRARIO CERO
+            iva += impuesto === 1 ? parseFloat(data['total'].replace("$ ", "")) * 0.12 : 0;
         });
 
         var subtotal = totalVenta - iva;
@@ -933,20 +750,21 @@
         $("#boleta_subtotal").html(subtotal.toFixed(2));
         $("#boleta_igv").html(iva.toFixed(2));
         $("#boleta_total").html(totalVenta.toFixed(2));
+
         // Limpiar input de efectivo exacto; desmarcar check de efectivo exacto
         // Borrar datos de efectivo entregado y vuelto
         $("#iptEfectivoRecibido").val("");
         $("#chkEfectivoExacto").prop('checked', false);
-        $("#chkTransferenciaBancaria").prop('checked', false);
-        $("#chkTarjetaCredito").prop('checked', false);
-        $("#chkTarjetaDebito").prop('checked', false);
-
         $("#EfectivoEntregado").html("0.00");
         $("#Vuelto").html("0.00");
-        $("#boleta_TDD").html("0.00");
-        $("#boleta_TDC").html("0.00");
+
         $("#iptCodigoVenta").val("").focus();
     }
+
+
+
+
+
     /*===================================================================*/
     //FUNCION PARA CARGAR PRODUCTOS EN EL DATATABLE
     /*===================================================================*/
@@ -954,9 +772,11 @@
 
         if (producto != "") {
             var codigo_producto = producto;
+
         } else {
             var codigo_producto = $("#iptCodigoVenta").val();
         }
+
         var producto_repetido = 0;
 
         /*===================================================================*/
@@ -987,8 +807,7 @@
 
                             Toast.fire({
                                 icon: 'error',
-                                title: ' El producto ' + data[
-                                        'descripcion_producto'] +
+                                title: ' El producto ' + data['descripcion_producto'] +
                                     ' ya no tiene stock'
                             })
 
@@ -1015,15 +834,14 @@
                         }
                     }
                 });
+
             }
         });
 
         if (producto_repetido == 1) {
             return;
         }
-        /*===================================================================*/
-        //LISTA EL PRODUCTO CUANDO SE BUSCA POR CODIGO DE BARRA O SE ESCRIBE EL NOMRE DEL PRODUCTO
-        /*===================================================================*/
+
         $.ajax({
             url: "ajax/productos.ajax.php",
             method: "POST",
@@ -1046,7 +864,6 @@
                         table.row.add({
                             'id': itemProducto,
                             'codigo_producto': respuesta['codigo_producto'],
-                            'ubicacion_producto': respuesta['ubicacion_producto'],
                             'id_categoria': respuesta['id_categoria'],
                             'nombre_categoria': respuesta['nombre_categoria'],
                             'descripcion_producto': respuesta['descripcion_producto'],
@@ -1160,9 +977,9 @@
                     //  Recalculamos el total de la venta
                     recalcularTotales();
 
-                    //             /*===================================================================*/
-                    //             //SI LA RESPUESTA ES FALSO, NO TRAE ALGUN DATO
-                    //             /*===================================================================*/
+                    /*===================================================================*/
+                    //SI LA RESPUESTA ES FALSO, NO TRAE ALGUN DATO
+                    /*===================================================================*/
                 } else {
                     Toast.fire({
                         icon: 'error',
@@ -1176,34 +993,32 @@
             }
         });
 
-
     } /* FIN CargarProductos */
 
     /*===================================================================*/
     //REALIZAR LA VENTA
     /*===================================================================*/
     function realizarVenta() {
+
         var count = 0;
         var totalVenta = $("#totalVenta").html();
         var nro_boleta = $("#iptNroVenta").val();
 
-        var ruc = $("#iptRuc").val().trim() || "NN";
-        var nombreApellido = $("#iptNombreApellido").val().trim() || "Usuario Final";
-        var correo = $("#iptCorreo").val().trim() || "usuario_final@nn.com";
-
         table.rows().eq(0).each(function(index) {
-            count++;
+            count = count + 1;
         });
 
         if (count > 0) {
-            var efectivoRecibido = parseFloat($("#iptEfectivoRecibido").val());
 
-            if (efectivoRecibido > 0) {
-                if (efectivoRecibido < parseFloat(totalVenta)) {
+            if ($("#iptEfectivoRecibido").val() > 0 && $("#iptEfectivoRecibido").val() != "") {
+
+                if ($("#iptEfectivoRecibido").val() < parseFloat(totalVenta)) {
+
                     Toast.fire({
                         icon: 'warning',
                         title: 'El efectivo es menor al costo total de la venta'
                     });
+
                     return false;
                 }
 
@@ -1211,18 +1026,21 @@
                 var arr = [];
 
                 table.rows().eq(0).each(function(index) {
+
                     var row = table.row(index);
+
                     var data = row.data();
-                    arr[index] =
-                        `${data['codigo_producto']},${parseFloat(data['cantidad'])},${data['total'].replace("$ ", "")}`;
+
+                    arr[index] = data['codigo_producto'] + "," + parseFloat(data['cantidad']) + "," + data[
+                            'total']
+                        .replace("$ ", "");
+
                     formData.append('arr[]', arr[index]);
+
                 });
 
-                formData.append('numero_ruc_cliente', ruc);
-                formData.append('nombres_apellidos_razon_social_cliente', nombreApellido);
-                formData.append('email_cliente', correo);
                 formData.append('nro_boleta', nro_boleta);
-                formData.append('descripcion_venta', `Venta realizada con Nro. Nota de Venta: ${nro_boleta}`);
+                formData.append('descripcion_venta', 'Venta realizada con Nro Factura: ' + nro_boleta);
                 formData.append('total_venta', parseFloat(totalVenta));
 
                 $.ajax({
@@ -1233,31 +1051,42 @@
                     contentType: false,
                     processData: false,
                     success: function(respuesta) {
+
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
                             title: respuesta,
                             showConfirmButton: false,
                             timer: 1500
-                        });
+                        })
+
                         table.clear().draw();
+
                         LimpiarInputs();
+
                         CargarNroBoleta();
+
                     }
                 });
+
             } else {
+
                 Toast.fire({
                     icon: 'warning',
                     title: 'Ingrese el monto en efectivo'
                 });
             }
+
         } else {
+
             Toast.fire({
                 icon: 'warning',
                 title: 'No hay productos en el listado.'
             });
+
         }
 
         $("#iptCodigoVenta").focus();
+
     } /* FIN realizarVenta */
-    </script>
+</script>

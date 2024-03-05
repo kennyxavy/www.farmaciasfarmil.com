@@ -68,7 +68,7 @@
                 <table class="display nowrap table-striped w-100 shadow" id="lstVentas">
                     <thead class="bg-info">
                         <tr>
-                            <th>Nro Boleta</th>
+                            <th>Nro Factura</th>
                             <th>Codigo Barras</th>
                             <th>Categoria</th>
                             <th>Producto</th>

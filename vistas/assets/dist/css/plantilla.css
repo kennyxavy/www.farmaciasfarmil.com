@@ -64,3 +64,13 @@ table.dataTable tbody td {
     background-color: transparent !important;
     border-color: transparent !important;
 }
+
+.horizontal-line {
+    /* border-top: 1px solid #000; */
+    background-color: white;
+    /* Puedes ajustar el color y el grosor de la línea según tus preferencias */
+    margin-top: 10px;
+    /* Puedes ajustar la distancia entre la línea y los elementos circundantes */
+    margin-bottom: 10px;
+    /* Puedes ajustar la distancia entre la línea y los elementos circundantes */
+}

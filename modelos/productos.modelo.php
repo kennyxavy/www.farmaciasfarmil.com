@@ -321,12 +321,12 @@ class ProductosModelo
     }
 
     /*===================================================================
-    LISTAR NOMBRE DE PRODUCTOS PARA INPUT DE AUTO COMPLETADO
+    LISTAR NOMBRE DE PRODUCTOS PARA INPUT DE AUTO COMPLETADO Y CODIGO DE BARRA
     ====================================================================*/
     static public function mdlListarNombreProductos()
     {
 
-        $stmt = Conexion::conectar()->prepare("SELECT CONCAT(codigo_producto, ' - ', c.nombre_categoria, ' - ', descripcion_producto, ' - ', marca_producto, ' - ', ubicacion_producto, '  - $ ', p.precio_venta_producto) AS descripcion_producto
+        $stmt = Conexion::conectar()->prepare("SELECT CONCAT(codigo_producto, '-', c.nombre_categoria, '/', descripcion_producto, '-','MARCA :', marca_producto, '-','UBICACION :', ubicacion_producto, '-','PRECIO :', p.precio_venta_producto,'$') AS descripcion_producto
                                       FROM productos p INNER JOIN categorias c ON p.id_categoria_producto = c.id_categoria");
 
 
@@ -339,30 +339,7 @@ class ProductosModelo
     /*===================================================================
     BUSCAR PRODUCTO POR SU CODIGO DE BARRAS
     ====================================================================*/
-    // static public function mdlGetDatosProducto($codigoProducto){
 
-    //     $stmt = Conexion::conectar()->prepare("SELECT   id,
-    //                                                     codigo_producto,
-    //                                                     c.id_categoria,                                                        
-    //                                                     c.nombre_categoria,
-    //                                                     descripcion_producto,
-    //                                                     '1' as cantidad,
-    //                                                     CONCAT('$ ',CONVERT(ROUND(precio_venta_producto,2), CHAR)) as precio_venta_producto,
-    //                                                     CONCAT('$ ',CONVERT(ROUND(1*precio_venta_producto,2), CHAR)) as total,
-    //                                                     '' as acciones,
-    //                                                     c.aplica_peso,
-    //                                                     -- p.precio_mayor_producto,
-    // 												    p.precio_oferta_producto
-    //                                             FROM productos p inner join categorias c on p.id_categoria_producto = c.id_categoria
-    //                                         WHERE codigo_producto = :codigoProducto
-    //                                             AND p.stock_producto > 0");
-
-    //     $stmt -> bindParam(":codigoProducto",$codigoProducto,PDO::PARAM_INT);
-
-    //     $stmt -> execute();
-
-    //     return $stmt->fetch(PDO::FETCH_OBJ);
-    // }
     static public function mdlGetDatosProducto($codigoProducto)
     {
         try {
@@ -385,9 +362,7 @@ class ProductosModelo
                                 FROM productos p
                                 INNER JOIN categorias c ON p.id_categoria_producto = c.id_categoria
                             WHERE codigo_producto = :codigoProducto
-                                AND p.stock_producto > 0
-        
-            ");
+                                AND p.stock_producto > 0");
 
             $stmt->bindParam(":codigoProducto", $codigoProducto, PDO::PARAM_INT);
             $stmt->execute();
@@ -411,22 +386,6 @@ class ProductosModelo
 
         $stmt->bindParam(":codigo_producto", $codigo_producto, PDO::PARAM_STR);
         $stmt->bindParam(":cantidad_a_comprar", $cantidad_a_comprar, PDO::PARAM_STR);
-
-        $stmt->execute();
-
-        return $stmt->fetch(PDO::FETCH_OBJ);
-    }
-    /*===================================================================
-    BUSCAR PRODUCTO POR SU CODIGO Y VER SI TIENE IMPUESTO
-    ====================================================================*/
-    static public function mdlCalcularImpuesto($codigoProducto)
-    {
-
-        $stmt = Conexion::conectar()->prepare("SELECT p.impuesto_producto_iva FROM productos p
-                                            WHERE codigo_producto = :codigoProducto");
-
-
-        $stmt->bindParam(":codigoProducto", $codigoProducto, PDO::PARAM_INT);
 
         $stmt->execute();
 

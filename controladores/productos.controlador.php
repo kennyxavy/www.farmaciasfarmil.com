@@ -111,14 +111,4 @@ class ProductosControlador
 
         return $respuesta;
     }
-    /*===================================================================
-    CALCULAR IMPUESTO IVA
-    ====================================================================*/
-    static public function ctrCalcularImpuesto($codigo_Producto)
-    {
-
-        $respuesta = ProductosModelo::mdlCalcularImpuesto($codigo_Producto);
-
-        return $respuesta;
-    }
 }

@@ -276,6 +276,31 @@
              }
          });
 
+         //  function formatoNumero(numero) {
+         //      return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+         //  }
+
+         //  setInterval(() => {
+         //      $.ajax({
+         //          url: "ajax/dashboard.ajax.php",
+         //          method: 'POST',
+         //          dataType: 'json',
+         //          success: function(respuesta) {
+         //              // console.log("respuesta", respuesta);
+         //              $("#totalProductos").html(respuesta[0]['totalProductos']);
+         //              $("#totalCompras").html('$ ' + respuesta[0]['totalCompras'].replace(
+         //                  /\d(?=(\d{3})+\.)/g, "$&,"))
+         //              $("#totalVentas").html('$ ' + respuesta[0]['totalVentas'].replace(
+         //                  /\d(?=(\d{3})+\.)/g,
+         //                  "$&,"))
+         //              $("#totalGanancias").html('$ ' + respuesta[0]['ganancias'].replace(
+         //                  /\d(?=(\d{3})+\.)/g, "$&,"))
+         //              $("#totalProductosMinStock").html(respuesta[0]['productosPocoStock'])
+         //              $("#totalVentasHoy").html('$ ' + respuesta[0]['ventasHoy'].replace(
+         //                  /\d(?=(\d{3})+\.)/g, "$&,"))
+         //          }
+         //      });
+         //  }, 10000);
          function formatoNumero(numero) {
              return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
          }
@@ -287,21 +312,30 @@
                  dataType: 'json',
                  success: function(respuesta) {
                      // console.log("respuesta", respuesta);
-                     $("#totalProductos").html(respuesta[0]['totalProductos']);
-                     $("#totalCompras").html('$ ' + respuesta[0]['totalCompras'].replace(
-                         /\d(?=(\d{3})+\.)/g, "$&,"))
-                     $("#totalVentas").html('$ ' + respuesta[0]['totalVentas'].replace(
-                         /\d(?=(\d{3})+\.)/g,
-                         "$&,"))
-                     $("#totalGanancias").html('$ ' + respuesta[0]['ganancias'].replace(
-                         /\d(?=(\d{3})+\.)/g, "$&,"))
-                     $("#totalProductosMinStock").html(respuesta[0]['productosPocoStock'])
-                     $("#totalVentasHoy").html('$ ' + respuesta[0]['ventasHoy'].replace(
-                         /\d(?=(\d{3})+\.)/g, "$&,"))
+                     if (respuesta && respuesta[0]) {
+                         $("#totalProductos").html(respuesta[0]['totalProductos']);
+                         $("#totalCompras").html('$ ' + formatoNumero(respuesta[0][
+                             'totalCompras'
+                         ]));
+                         $("#totalVentas").html('$ ' + formatoNumero(respuesta[0][
+                             'totalVentas'
+                         ]));
+                         $("#totalGanancias").html('$ ' + formatoNumero(respuesta[0][
+                             'ganancias'
+                         ]));
+                         $("#totalProductosMinStock").html(respuesta[0]['productosPocoStock']);
+                         $("#totalVentasHoy").html('$ ' + formatoNumero(respuesta[0][
+                             'ventasHoy'
+                         ]));
+                     } else {
+                         console.error("Respuesta incorrecta del servidor:", respuesta);
+                     }
+                 },
+                 error: function(xhr, status, error) {
+                     console.error("Error en la solicitud AJAX:", error);
                  }
              });
          }, 10000);
-
 
          /* =======================================================
          SOLICITUD AJAX GRAFICO DE BARRAS DE VENTAS DEL MES
@@ -348,15 +382,21 @@
                  var areaChartData = {
                      labels: fecha_venta,
                      datasets: [{
-                         label: 'Ventas del Anterior - Diciembre 2021',
+                         label: 'Ventas del Mes Anterior',
                          backgroundColor: 'rgb(255, 140, 0,0.9)',
-                         data: total_venta_ant
+                         data: total_venta_ant.map(function(value) {
+                             return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                                 ",");
+                         })
                      }, {
-                         label: 'Ventas del Mes - Enero 2022',
+                         label: 'Ventas del Mes',
                          backgroundColor: 'rgba(60,141,188,0.9)',
-                         data: total_venta
+                         data: total_venta.map(function(value) {
+                             return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
+                                 ",");
+                         })
                      }]
-                 }
+                 };
 
                  var barChartData = $.extend(true, {}, areaChartData);
 
