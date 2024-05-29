@@ -116,16 +116,6 @@
                             <h3>Total Venta: $ <span id="totalVenta">0.00</span></h3>
                         </div>
 
-                        <!-- BOTONES PARA VACIAR LISTADO Y COMPLETAR LA VENTA -->
-                        <!-- <div class="col-md-6 text-right"></div>
-                            <button class="btn btn-primary" id="btnIniciarVenta">
-                                <i class="fas fa-shopping-cart"></i> Realizar Venta
-                            </button>
-                            <button class="btn btn-danger" id="btnVaciarListado">
-                                <i class="far fa-trash-alt"></i> Vaciar Listado
-                            </button>
-                        </div> -->
-
                         <!-- LISTADO QUE CONTIENE LOS PRODUCTOS QUE SE VAN AGREGANDO PARA LA COMPRA -->
                         <div class="col-md-12">
 
@@ -211,11 +201,12 @@
                                 <select class="form-select form-select-sm" aria-label=".form-select-sm example"
                                     id="selTipoPago" disabled>
                                     <option value="0">Seleccione Tipo Pago</option>
-                                    <option value="1" selected="true">Efectivo</option>
-                                    <option value="2">Tarjeta de Crédito</option>
-                                    <option value="3">Tarjeta de Débito</option>
-                                    <option value="4">Transferencia</option>
+                                    <option value="efectivo" selected>Efectivo</option>
+                                    <option value="transferencia">Transferencia</option>
+                                    <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                                    <option value="tarjeta_debito">Tarjeta de Débito</option>
                                 </select>
+
 
 
                                 <span id="validate_categoria" class="text-danger small fst-italic" style="display:none">
@@ -224,9 +215,23 @@
                             </div>
                             <!-- EFECTIVO RECIBIDO -->
                             <div class="form-group">
-                                <label for="iptEfectivoRecibido">Efectivo recibido</label>
+                                <label for="iptEfectivoRecibido">Valor recibido</label>
                                 <input type="number" min="0" name="iptEfectivo" id="iptEfectivoRecibido"
                                     class="form-control form-control-sm" placeholder="Cantidad de efectivo recibida">
+                            </div>
+                            <!-- MOSTRAR MONTO EFECTIVO ENTREGADO Y EL VUELTO -->
+                            <div class="row mt-2">
+
+                                <div class="col-12">
+                                    <h6 class="text-start fw-bold">Monto: $ <span id="EfectivoEntregado">0.00</span>
+                                    </h6>
+                                </div>
+
+                                <div class="col-12">
+                                    <h6 class="text-start text-danger fw-bold">Vuelto: $ <span id="Vuelto">0.00</span>
+                                    </h6>
+                                </div>
+
                             </div>
                             <!-- INPUT DE EFECTIVO ENTREGADO -->
                             <div class="form-check d-flex justify-content-between">
@@ -262,20 +267,7 @@
                             </div>
 
                             <div class="col-md-12 horizontal-line"></div>
-                            <!-- MOSTRAR MONTO EFECTIVO ENTREGADO Y EL VUELTO -->
-                            <div class="row mt-2">
 
-                                <div class="col-12">
-                                    <h6 class="text-start fw-bold">Monto Efectivo: $ <span
-                                            id="EfectivoEntregado">0.00</span></h6>
-                                </div>
-
-                                <div class="col-12">
-                                    <h6 class="text-start text-danger fw-bold">Vuelto: $ <span id="Vuelto">0.00</span>
-                                    </h6>
-                                </div>
-
-                            </div>
 
                             <!-- MOSTRAR EL SUBTOTAL, IVA Y TOTAL DE LA VENTA -->
                             <div class="row">
@@ -303,7 +295,7 @@
                                 </div>
 
                                 <div class="col-md-7">
-                                    <span>IVA (12%)</span>
+                                    <span>IVA (15%)</span>
                                 </div>
                                 <div class="col-md-5 text-right">
                                     $ <span class="" id="boleta_igv">0.00</span>
@@ -666,124 +658,84 @@
         /* =======================================================================================
         EVENTO QUE PERMITE CHECKEAR EL EFECTIVO CUANDO ES EXACTO O TRANSFERENCIA BANCARIA
        =========================================================================================*/
-        $("#chkEfectivoExacto").change(function() {
+        $("#chkEfectivoExacto, #chkTransferenciaBancaria, #chkTarjetaDebito, #chkTarjetaCredito").change(
+            function() {
+                var isChecked = $(this).is(':checked');
+                console.log("Checkbox changed: ", $(this).attr('id'), "Checked: ", isChecked);
+                if (isChecked) {
+                    handleChecked($(this).attr('id'));
+                } else {
+                    handleUnchecked();
+                }
+            });
 
-            if ($("#chkEfectivoExacto").is(':checked')) {
-                var vuelto = 0;
-                var totalVenta = $("#totalVenta").html();
-                $("#iptEfectivoRecibido").val(totalVenta);
-                $("#EfectivoEntregado").html(totalVenta);
-                var EfectivoRecibido = parseFloat($("#EfectivoEntregado").html().replace("$ ", ""));
-                vuelto = parseFloat(totalVenta) - parseFloat(EfectivoRecibido);
-                $("#Vuelto").html(vuelto.toFixed(2));
+        function handleChecked(id) {
+            var totalVenta = parseFloat($("#totalVenta").html());
+            var efectivoEntregado = totalVenta;
+            var comision = 0;
+            var formaPago = ""; // Inicializar la variable formaPago
 
-            }
-            if ($("#chkTarjetaCredito").is(':checked')) {
+            console.log("Handle checked: ", id);
+            console.log("Total Venta inicial: ", totalVenta);
 
-                $("#boleta_TDD").html("0.00");
-                var totalVenta = parseFloat($("#totalVenta").html());
-                $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
-                $("#EfectivoEntregado").html(totalVenta.toFixed(2));
-                var comision = parseFloat(totalVenta) * 0.054;
-                totalVenta += comision;
-                $("#boleta_TDC").html(comision.toFixed(2));
-                $("#boleta_total").html(totalVenta.toFixed(2));
-                $("#totalVentaRegistrar").html(totalVenta.toFixed(2))
-            } else {
-
-                $("#iptEfectivoRecibido").val("")
-                $("#EfectivoEntregado").html("0.00");
-                $("#Vuelto").html("0.00");
-
-            }
-        })
-
-        // $("#chkEfectivoExacto, #chkTransferenciaBancaria").change(function() {
-        //     var tipo_pago;
-        //     if ($("#chkEfectivoExacto").is(':checked')) {
-        //         tipo_pago = "Exacto";
-        //     } else if ($("#chkTransferenciaBancaria").is(':checked')) {
-        //         tipo_pago = "Transferencia";
-        //     }
-
-        //     var efectivo = $("#boleta_subtotal").val("");
-        //     $("#totalVentaRegistrar").val(efectivo);
-        //     $("#boleta_TDC").html("0.00");
-        //     $("#boleta_TDD").html("0.00");
-
-        //     var EfectivoExactoTransferenciaBancaria = $("#chkEfectivoExacto").is(':checked') || $(
-        //         "#chkTransferenciaBancaria").is(':checked');
-
-        //     if (EfectivoExactoTransferenciaBancaria) {
-        //         var vuelto = 0;
-        //         var totalVenta = $("#totalVenta").html();
-        //         $("#iptEfectivoRecibido").val(totalVenta);
-        //         $("#EfectivoEntregado").html(totalVenta);
-        //         var EfectivoRecibido = parseFloat($("#EfectivoEntregado").html().replace("$", ""));
-        //         vuelto = parseFloat(totalVenta) - parseFloat(EfectivoRecibido);
-        //         $("#Vuelto").html(vuelto.toFixed(2));
-        //     } else {
-        //         $("#iptEfectivoRecibido").val("");
-        //         $("#EfectivoEntregado").html("0.00");
-        //         $("#Vuelto").html("0.00");
-        //     }
-        // });
-
-
-        /* =======================================================================================
-                EVENTO QUE PERMITE CHECKEAR PAGO DE TARJETA DE CREDITO
-                =========================================================================================*/
-        $("#chkTarjetaCredito").change(function() {
-            var tipo_pago;
-            if ($("#chkTarjetaCredito").is(':checked')) {
-                tipo_pago = "Tarjeta Credito";
-                $("#boleta_TDD").html("0.00");
-                var totalVenta = parseFloat($("#totalVenta").html());
-                $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
-                $("#EfectivoEntregado").html(totalVenta.toFixed(2));
-                var comision = parseFloat(totalVenta) * 0.054;
-                totalVenta += comision;
-                $("#boleta_TDC").html(comision.toFixed(2));
-                $("#boleta_total").html(totalVenta.toFixed(2));
-                $("#totalVentaRegistrar").html(totalVenta.toFixed(2))
-            } else {
-                $("#boleta_TDC").html("0.00");
-                $("#boleta_TDD").html("0.00");
-                $("#iptEfectivoRecibido").val("");
-                $("#EfectivoEntregado").html("0.00");
-                $("#Vuelto").html("0.00");
-
+            switch (id) {
+                case 'chkTarjetaCredito':
+                    $("#boleta_TDD").html("0.00");
+                    comision = parseFloat(totalVenta) * 0.054;
+                    totalVenta += comision;
+                    $("#boleta_TDC").html(comision.toFixed(2));
+                    formaPago = "tarjeta_credito"; // Establecer formaPago como tarjeta de crédito
+                    console.log("Comisión tarjeta crédito: ", comision);
+                    break;
+                case 'chkTarjetaDebito':
+                    $("#boleta_TDC").html("0.00");
+                    comision = parseFloat(totalVenta) * 0.0224;
+                    totalVenta += comision;
+                    $("#boleta_TDD").html(comision.toFixed(2));
+                    formaPago = "tarjeta_debito"; // Establecer formaPago como tarjeta de débito
+                    console.log("Comisión tarjeta débito: ", comision);
+                    break;
+                case 'chkEfectivoExacto':
+                    $("#boleta_TDD").html("0.00");
+                    $("#boleta_TDC").html("0.00");
+                    formaPago = "efectivo"; // Establecer formaPago como efectivo
+                    $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
+                    break;
+                case 'chkTransferenciaBancaria':
+                    $("#boleta_TDD").html("0.00");
+                    $("#boleta_TDC").html("0.00");
+                    formaPago = "transferencia"; // Establecer formaPago como transferencia bancaria
+                    break;
             }
 
+            console.log("Total Venta después de comisión: ", totalVenta);
 
-        });
-        /* =======================================================================================
-                EVENTO QUE PERMITE CHECKEAR PAGO DE TARJETA DE DEBITO
-        =====================================================================================*/
-        $("#chkTarjetaDebito").change(function() {
-            var tipo_pago;
-            if ($("#chkTarjetaDebito").is(':checked')) {
-                tipo_pago = "Tarjeta Debito";
-                $("#boleta_TDC").html("0.00");
-                var totalVenta = parseFloat($("#totalVenta").html());
-                $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
-                $("#EfectivoEntregado").html(totalVenta.toFixed(2));
-                var comision = parseFloat(totalVenta) * 0.0224;
-                totalVenta += comision;
-                $("#boleta_TDD").html(comision.toFixed(2));
-                $("#boleta_total").html(totalVenta.toFixed(2));
-                $("#totalVentaRegistrar").html(totalVenta.toFixed(2))
-            } else {
-                $("#boleta_TDC").html("0.00");
-                $("#boleta_TDD").html("0.00");
-                $("#iptEfectivoRecibido").val("");
-                $("#EfectivoEntregado").html("0.00");
-                $("#Vuelto").html("0.00");
+            $("#iptEfectivoRecibido").val(totalVenta.toFixed(2));
+            $("#EfectivoEntregado").html(efectivoEntregado.toFixed(2));
+            $("#boleta_total").html(totalVenta.toFixed(2));
+            $("#totalVentaRegistrar").html(totalVenta.toFixed(2));
 
-            }
+            console.log("Mostrar los totales: ");
+            console.log("Recibido: ", totalVenta);
+            console.log("Entregado: ", efectivoEntregado);
+            console.log("Valor en factura: ", totalVenta);
+            console.log("Total: ", totalVenta);
 
+            var vuelto = 0;
+            $("#Vuelto").html(vuelto.toFixed(2));
+            console.log("Vuelto: ", vuelto);
+            // Actualizar el nombre de la forma de pago seleccionada en el select
+            $("#selTipoPago").val(formaPago);
 
-        });
+            console.log("Forma de Pago: " + formaPago); // Mostrar la forma de pago en la consola
+        }
+
+        function handleUnchecked() {
+            console.log("Handle unchecked");
+            $("#iptEfectivoRecibido").val("");
+            $("#EfectivoEntregado").html("0.00");
+            $("#Vuelto").html("0.00");
+        }
 
         /* ======================================================================================
         EVENTO QUE SE DISPARA AL DIGITAR EL MONTO EN EFECTIVO ENTREGADO POR EL CLIENTE
@@ -916,37 +868,86 @@
         var totalVenta = 0.00;
         var iva = 0.00;
 
+        console.log("Inicio de recalcularTotales");
+        console.log("totalVenta inicial: ", totalVenta);
+        console.log("iva inicial: ", iva);
+
         table.rows().eq(0).each(function(index) {
             var row = table.row(index);
             var data = row.data();
 
-            totalVenta += parseFloat(data['total'].replace("$ ", ""));
-            var impuesto = parseInt(data['impuesto_producto_iva']);
-            iva += impuesto === 1 ? parseFloat(data['total'].replace("$ ", "")) * 0.12 :
-                0; //SI EL PRODUCTO TIENE IMPUESTO HACE SACA EL CALCULO DEL IVA AL SUBTOTAL CASO CONTRARIO CERO
+            // Asegurarse de que los datos no sean nulos o indefinidos y puedan convertirse en números
+            var total = parseFloat(data['total'].replace("$ ", "")) || 0.00;
+            var impuesto = parseInt(data['impuesto_producto_iva']) || 0;
+
+            console.log(`Fila ${index} - total: ${total}, impuesto: ${impuesto}`);
+
+            totalVenta += total;
+            iva += impuesto === 1 ? total * 0.15 :
+                0; // Si el producto tiene impuesto, calcula el IVA, si no, agrega 0
+
+            console.log(`Acumulado después de fila ${index} - totalVenta: ${totalVenta}, iva: ${iva}`);
         });
 
         var subtotal = totalVenta - iva;
+        console.log("subtotal calculado: ", subtotal);
 
+        // Actualizar los elementos del DOM con los valores calculados
         $("#totalVenta").html(totalVenta.toFixed(2));
-        $("#totalVentaRegistrar").html(totalVenta);
+        console.log("Total de ventas: ", totalVenta);
+        $("#totalVentaRegistrar").html(totalVenta.toFixed(
+            2)); // Asegurar que ambos sean mostrados en formato de dos decimales
         $("#boleta_subtotal").html(subtotal.toFixed(2));
         $("#boleta_igv").html(iva.toFixed(2));
         $("#boleta_total").html(totalVenta.toFixed(2));
-        // Limpiar input de efectivo exacto; desmarcar check de efectivo exacto
-        // Borrar datos de efectivo entregado y vuelto
+
+        console.log("Valores actualizados en el DOM");
+
+        // Limpiar input de efectivo exacto y desmarcar checkboxes
         $("#iptEfectivoRecibido").val("");
         $("#chkEfectivoExacto").prop('checked', false);
         $("#chkTransferenciaBancaria").prop('checked', false);
         $("#chkTarjetaCredito").prop('checked', false);
         $("#chkTarjetaDebito").prop('checked', false);
 
-        $("#EfectivoEntregado").html("0.00");
-        $("#Vuelto").html("0.00");
-        $("#boleta_TDD").html("0.00");
-        $("#boleta_TDC").html("0.00");
+        console.log("Checkboxes y campos de entrada reseteados");
+
+        // Limpiar otros inputs y resetear el enfoque en el campo de código de venta
         $("#iptCodigoVenta").val("").focus();
+
+        console.log("Final de recalcularTotales");
     }
+
+    // function recalcularTotales() {
+    //     var totalVenta = 0.00;
+    //     var iva = 0.00;
+
+    //     table.rows().eq(0).each(function(index) {
+    //         var row = table.row(index);
+    //         var data = row.data();
+
+    //         totalVenta += parseFloat(data['total'].replace("$ ", ""));
+    //         var impuesto = parseInt(data['impuesto_producto_iva']);
+    //         iva += impuesto === 1 ? parseFloat(data['total'].replace("$ ", "")) * 0.15 :
+    //             0; //SI EL PRODUCTO TIENE IMPUESTO SACA EL CALCULO DEL IVA AL SUBTOTAL CASO CONTRARIO CERO
+    //     });
+
+    //     var subtotal = totalVenta - iva;
+
+    //     $("#totalVenta").html(totalVenta.toFixed(2));
+    //     $("#totalVentaRegistrar").html(totalVenta);
+    //     $("#boleta_subtotal").html(subtotal.toFixed(2));
+    //     $("#boleta_igv").html(iva.toFixed(2));
+    //     $("#boleta_total").html(totalVenta.toFixed(2));
+    //     // Limpiar input de efectivo exacto; desmarcar check de efectivo exacto
+    //     // Borrar datos de efectivo entregado y vuelto
+    //     $("#iptEfectivoRecibido").val("");
+    //     $("#chkEfectivoExacto").prop('checked', false);
+    //     $("#chkTransferenciaBancaria").prop('checked', false);
+    //     $("#chkTarjetaCredito").prop('checked', false);
+    //     $("#chkTarjetaDebito").prop('checked', false);
+    //     $("#iptCodigoVenta").val("").focus();
+    // }
     /*===================================================================*/
     //FUNCION PARA CARGAR PRODUCTOS EN EL DATATABLE
     /*===================================================================*/
@@ -1182,14 +1183,25 @@
     /*===================================================================*/
     //REALIZAR LA VENTA
     /*===================================================================*/
+
     function realizarVenta() {
+
+
         var count = 0;
         var totalVenta = $("#totalVenta").html();
         var nro_boleta = $("#iptNroVenta").val();
+        console.log(`Funcion Calculo de venta: ${totalVenta}, iva: ${nro_boleta}`);
+        /*===================================================================*/
+        //FUNCION PARA VALIDAR DATOS DE USUARIOS PARA LA FACTURA
+        /*===================================================================*/
+
 
         var ruc = $("#iptRuc").val().trim() || "NN";
         var nombreApellido = $("#iptNombreApellido").val().trim() || "Usuario Final";
         var correo = $("#iptCorreo").val().trim() || "usuario_final@nn.com";
+        console.log(
+            `Datos para la factura si es vacio se llena solo RUC: ${ruc}, Nombres: ${nombreApellido}, Nombres: ${correo}`
+        );
 
         table.rows().eq(0).each(function(index) {
             count++;
@@ -1225,6 +1237,10 @@
                 formData.append('descripcion_venta', `Venta realizada con Nro. Nota de Venta: ${nro_boleta}`);
                 formData.append('total_venta', parseFloat(totalVenta));
 
+                console.log(
+                    `formDat Datos que pasan al proceso ajax ventas: ${ruc}, Nombres: ${nombreApellido}, Correo: ${correo}, Numero de venta: ${nro_boleta}, Total de venta: ${totalVenta}`
+                );
+
                 $.ajax({
                     url: "ajax/ventas.ajax.php",
                     method: "POST",
@@ -1257,7 +1273,11 @@
                 title: 'No hay productos en el listado.'
             });
         }
-
+        // Borrar datos de efectivo entregado y vuelto
+        $("#EfectivoEntregado").html("0.00");
+        $("#Vuelto").html("0.00");
+        $("#boleta_TDD").html("0.00");
+        $("#boleta_TDC").html("0.00");
         $("#iptCodigoVenta").focus();
     } /* FIN realizarVenta */
     </script>
